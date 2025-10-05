@@ -49,7 +49,6 @@ class _VideoTinderScreenState extends State<VideoTinderScreen> {
     _likedVideos.clear();
     _roundNumber++;
 
-    // Show nice transition
     setState(() => _gameState = GameState.transitioning);
     Future.delayed(const Duration(seconds: 2), () {
       _initializeControllersForRound();
@@ -126,8 +125,14 @@ class _VideoTinderScreenState extends State<VideoTinderScreen> {
       return;
     }
 
-    // If user liked ALL videos or NONE, we need to eliminate some
-    if (_likedVideos.isEmpty || _likedVideos.length == _videosForCurrentRound.length) {
+    // If user liked NONE, end the game with no favorites
+    if (_likedVideos.isEmpty) {
+      setState(() => _gameState = GameState.finished);
+      return;
+    }
+
+    // If user liked ALL videos, we need to eliminate some
+    if (_likedVideos.length == _videosForCurrentRound.length) {
       // Automatically eliminate half (rounded up) to ensure progress
       final half = (_videosForCurrentRound.length / 2).ceil();
       _likedVideos.clear();
@@ -137,12 +142,8 @@ class _VideoTinderScreenState extends State<VideoTinderScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              _likedVideos.length == _videosForCurrentRound.length
-                  ? '❤️ You liked all! Keeping top ${_likedVideos.length} videos'
-                  : '💔 None liked! Keeping top ${_likedVideos.length} videos',
-            ),
-            duration: const Duration(seconds: 2),
+            content: Text('❤️ You liked all! Keeping top ${_likedVideos.length} videos'),
+            duration: const Duration(seconds: 5),
             backgroundColor: Colors.orange,
           ),
         );

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -11,12 +10,13 @@ class VideoCard extends StatefulWidget {
 }
 
 class _VideoCardState extends State<VideoCard> {
-  bool _showPlayPauseIcon = false;
-  Timer? _iconVisibilityTimer;
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
-    _iconVisibilityTimer?.cancel();
     super.dispose();
   }
 
@@ -29,21 +29,48 @@ class _VideoCardState extends State<VideoCard> {
       } else {
         widget.controller.play();
       }
-      _showPlayPauseIcon = true;
-    });
-
-    _iconVisibilityTimer?.cancel();
-    _iconVisibilityTimer = Timer(const Duration(milliseconds: 800), () {
-      if (mounted) {
-        setState(() => _showPlayPauseIcon = false);
-      }
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {
     if (!widget.controller.value.isInitialized) {
-      return const Center(child: CircularProgressIndicator());
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF1a1a2e),
+              Color(0xFF16213e),
+              Color(0xFF0f3460),
+            ],
+          ),
+        ),
+        child: const Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.orangeAccent),
+                strokeWidth: 3,
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Loading Video...',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
     }
 
     final screenSize = MediaQuery.of(context).size;
@@ -54,49 +81,103 @@ class _VideoCardState extends State<VideoCard> {
     double videoHeight;
     
     if (videoAspectRatio > screenAspectRatio) {
-      videoWidth = screenSize.width;
+      videoWidth = screenSize.width * 0.9;
       videoHeight = videoWidth / videoAspectRatio;
     } else {
-      videoHeight = screenSize.height * 0.7;
+      videoHeight = screenSize.height * 0.65;
       videoWidth = videoHeight * videoAspectRatio;
     }
 
     return GestureDetector(
       onTap: _togglePlayPause,
       child: Container(
-        color: Colors.black,
-        child: Center(
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              SizedBox(
-                width: videoWidth,
-                height: videoHeight,
-                child: AspectRatio(
-                  aspectRatio: videoAspectRatio,
-                  child: VideoPlayer(widget.controller),
-                ),
+              margin: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    spreadRadius: 5,
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  ),
+                  BoxShadow(
+                    color: Colors.white.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 5,
+                    offset: const Offset(0, -2),
+                  ),
+                ],
               ),
-              AnimatedOpacity(
-                opacity: _showPlayPauseIcon ? 1.0 : 0.0,
-                duration: const Duration(milliseconds: 300),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(25),
                 child: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: const BoxDecoration(
-                    color: Colors.black54,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    widget.controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                    color: Colors.white,
-                    size: 60,
+                  color: Colors.black,
+                  child: Center(
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        // Video player
+                        SizedBox(
+                          width: videoWidth,
+                          height: videoHeight,
+                          child: AspectRatio(
+                            aspectRatio: videoAspectRatio,
+                            child: VideoPlayer(widget.controller),
+                          ),
+                        ),
+                        
+                        Positioned.fill(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.transparent,
+                                  Colors.transparent,
+                                  Colors.black.withOpacity(0.1),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        
+                        Positioned(
+                          top: 15,
+                          right: 15,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.6),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.touch_app,
+                                  color: Colors.white70,
+                                  size: 14,
+                                ),
+                                SizedBox(width: 4),
+                                Text(
+                                  'Tap to play',
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }
