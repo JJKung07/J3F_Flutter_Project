@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'video_tinder_screen.dart';
+import '../bloc/video_game_cubit.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
@@ -130,6 +132,7 @@ class _LandingScreenState extends State<LandingScreen> {
                             ),
                           ),
                           onPressed: () {
+                            context.read<VideoGameCubit>().startNewGame();
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
