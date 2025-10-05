@@ -1,0 +1,44 @@
+// Exercises Solution
+
+/*
+ExERCISE 1:
+SOLUTION FOR THE ACTION BUTTONS:
+
+Replace the TODO comment section in _buildGameScreen method with:
+
+        // Action Buttons
+        Positioned(
+          bottom: 40,
+          left: 0,
+          right: 0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              FloatingActionButton(
+                heroTag: "dislike",
+                onPressed: () => _swiperController.swipe(CardSwiperDirection.left),
+                backgroundColor: Colors.red,
+                child: const Icon(Icons.close, color: Colors.white),
+              ),
+              FloatingActionButton(
+                heroTag: "like",
+                onPressed: () => _swiperController.swipe(CardSwiperDirection.right),
+                backgroundColor: Colors.green,
+                child: const Icon(Icons.favorite, color: Colors.white),
+              ),
+            ],
+          ),
+        ),
+
+EXERCISE 2:
+SOLUTION FOR THE VIDEO REPOSITORY:
+STEP 1: Add new video files to the assets folder
+STEP 2: Add an videos path to videos_repository.dart
+  static const List<String> _videoUrls = [
+    'assets/videos.mp4',
+  ];
+
+  static const List<String> _videoTitles = [
+    'videos1',
+  ];
+*/

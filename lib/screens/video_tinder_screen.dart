@@ -247,29 +247,17 @@ class _VideoTinderScreenState extends State<VideoTinderScreen> {
           ),
         ),
 
-        // Action Buttons
-        Positioned(
-          bottom: 40,
-          left: 0,
-          right: 0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              FloatingActionButton(
-                heroTag: "dislike",
-                onPressed: () => _swiperController.swipe(CardSwiperDirection.left),
-                backgroundColor: Colors.red,
-                child: const Icon(Icons.close, color: Colors.white),
-              ),
-              FloatingActionButton(
-                heroTag: "like",
-                onPressed: () => _swiperController.swipe(CardSwiperDirection.right),
-                backgroundColor: Colors.green,
-                child: const Icon(Icons.favorite, color: Colors.white),
-              ),
-            ],
-          ),
-        ),
+        // TODO: ASSIGNMENT - Implement Like/Dislike Action Buttons
+        // Your task is to add action buttons that allow users to programmatically swipe cards
+        // Requirements:
+        // 1. Add two FloatingActionButton widgets (or similar) at the bottom of the screen
+        // 2. One button for "dislike" (swipe left) - use red color and close/X icon
+        // 3. One button for "like" (swipe right) - use green color and heart/favorite icon
+        // 4. Make sure to set unique heroTag for each FloatingActionButton
+        // 5. Position the buttons in a Row with MainAxisAlignment.spaceEvenly
+        // 6. Wrap in a Positioned widget with bottom: 40, left: 0, right: 0
+        //
+        // Hint: Look at how CardSwiperController is used and imported
       ],
     );
   }
